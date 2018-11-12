@@ -15,7 +15,7 @@ var rclient = new Client();
 // use the same time for all updates in this run
 var time = new Date();
 
-function getPrinter(ip,args){
+function getPrinter(ip,args,name){
 	rclient.get('http://' + ip + '/api/printer', args, function (data) {
 		// Bed
 		var tBed = {value: data.temperature.bed.actual, time: time};
@@ -25,7 +25,7 @@ function getPrinter(ip,args){
 		var tExTarget = {value: data.temperature.tool0.target, time: time};
 
 		client.writeMeasurement(
-			'temperature', [
+			'temperature_'+name, [
 				{
 					fields: {
 						t_bed: tBed.value,
@@ -45,13 +45,13 @@ function getPrinter(ip,args){
 };
 
 	// job status
-function getJob(ip, args){
+function getJob(ip, args,name ){
 		rclient.get('http://' + ip + '/api/job', args, function (data) {
 		// Status
 		var status = {value: data.state, time: time};
 
 		client.writeMeasurement(
-			'status', [
+			'status_'+name, [
 				{
 					fields: {
 						status: status.value
@@ -79,7 +79,18 @@ function getJob(ip, args){
 					},
 				}
 			]
-		)
+		)else{
+			client.writeMeasurement(
+			'status', [
+				{
+					fields: {
+						completion: 0,
+						printTime: 0,
+						printTimeLeft: 0,
+					},
+				}
+			]
+			}
 		}
 	}).on('error', function (err) {
 		console.log('something went wrong on the request', err.request.options);
@@ -88,8 +99,8 @@ function getJob(ip, args){
 
 lockFile.lock('/tmp/octoStats.lock', function () {
 	Config.octoprint.forEach(function(e) {
-	  	getJob(ip,{headers: {'X-Api-Key': e.apikey}});
-		getPrinter(ip,{headers: {'X-Api-Key': e.apikey}});
+	  	getJob(e.host,{headers: {'X-Api-Key': e.apikey}},e.name);
+		getPrinter(e.host,{headers: {'X-Api-Key': e.apikey}},e.name);
 	});
 	lockFile.unlock('/tmp/octoStats.lock', function () {
 		console.log('failed to unlock');

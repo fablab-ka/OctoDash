@@ -4,14 +4,16 @@
     "port": 8086,
     "username": "root",
     "password": "password",
-    "database": "printer"
+    "database": "3dprinter"
   },
   "octoprint": [{
     "host": "127.0.0.1",
-    "apikey": "abcdefghiyklmnopqrs"
+    "apikey": "abcdefghiyklmnopqrs",
+    "name": "Hexagon1"
   },
   {
     "host": "127.0.0.2",
-    "apikey": "abcdefghiykasd"
+    "apikey": "abcdefghiykasd",
+    "name": "Hexagon2"
   }]
 }
