@@ -15,8 +15,8 @@ var rclient = new Client();
 // use the same time for all updates in this run
 var time = new Date();
 
-function getPrinter(ip,args,name){
-	rclient.get('http://' + ip + '/api/printer', args, function (data) {
+function getPrinter(host,args,name){
+	rclient.get('http://' + host + '/api/printer', args, function (data) {
 		// Bed
 		var tBed = {value: data.temperature.bed.actual, time: time};
 		var tBedTarget = {value: data.temperature.bed.target, time: time};
@@ -25,7 +25,7 @@ function getPrinter(ip,args,name){
 		var tExTarget = {value: data.temperature.tool0.target, time: time};
 
 		client.writeMeasurement(
-			'temperature_'+name, [
+			'temperature', [
 				{
 					fields: {
 						t_bed: tBed.value,
@@ -33,6 +33,7 @@ function getPrinter(ip,args,name){
 						t_ex: tEx.value,
 						t_ex_target: tExTarget.value
 					},
+					tags: { host: name },
 				}
 			]
 		).catch(err => {
@@ -45,17 +46,18 @@ function getPrinter(ip,args,name){
 };
 
 	// job status
-function getJob(ip, args,name ){
-		rclient.get('http://' + ip + '/api/job', args, function (data) {
+function getJob(host, args,name ){
+		rclient.get('http://' + host + '/api/job', args, function (data) {
 		// Status
 		var status = {value: data.state, time: time};
 
 		client.writeMeasurement(
-			'status_'+name, [
+			'status', [
 				{
 					fields: {
 						status: status.value
-					}
+					},
+					tags: { host: name },
 				}
 			]
 		)
@@ -77,6 +79,7 @@ function getJob(ip, args,name ){
 						printTime: printTime.value,
 						printTimeLeft: printTimeLeft.value,
 					},
+					tags: { host: name },
 				}
 			]
 		)else{
@@ -88,6 +91,7 @@ function getJob(ip, args,name ){
 						printTime: 0,
 						printTimeLeft: 0,
 					},
+					tags: { host: name },
 				}
 			]
 			}

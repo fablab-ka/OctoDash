@@ -7,12 +7,12 @@
     "database": "3dprinter"
   },
   "octoprint": [{
-    "host": "127.0.0.1",
+    "host": "127.0.0.1:5001",
     "apikey": "abcdefghiyklmnopqrs",
     "name": "Hexagon1"
   },
   {
-    "host": "127.0.0.2",
+    "host": "127.0.0.1:5002",
     "apikey": "abcdefghiykasd",
     "name": "Hexagon2"
   }]
