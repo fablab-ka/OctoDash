@@ -6,8 +6,12 @@
     "password": "password",
     "database": "printer"
   },
-  "octoprint": {
+  "octoprint": [{
     "host": "127.0.0.1",
     "apikey": "abcdefghiyklmnopqrs"
-  }
+  },
+  {
+    "host": "127.0.0.2",
+    "apikey": "abcdefghiykasd"
+  }]
 }

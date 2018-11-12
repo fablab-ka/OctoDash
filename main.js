@@ -15,16 +15,7 @@ var rclient = new Client();
 // use the same time for all updates in this run
 var time = new Date();
 
-// octopi ip
-var ip = Config.octoprint.host;
-
-// arguments for the rest client (octoprint api key)
-var args = {
-	headers: {'X-Api-Key': Config.octoprint.apikey}
-};
-
-lockFile.lock('/tmp/felix.lock', function () {
-	// printer status
+function getPrinter(ip,args){
 	rclient.get('http://' + ip + '/api/printer', args, function (data) {
 		// Bed
 		var tBed = {value: data.temperature.bed.actual, time: time};
@@ -51,10 +42,11 @@ lockFile.lock('/tmp/felix.lock', function () {
 	}).on('error', function (err) {
 		console.log('something went wrong on the request', err.request.options);
 	});
-
+};
 
 	// job status
-	rclient.get('http://' + ip + '/api/job', args, function (data) {
+function getJob(ip, args){
+		rclient.get('http://' + ip + '/api/job', args, function (data) {
 		// Status
 		var status = {value: data.state, time: time};
 
@@ -92,8 +84,14 @@ lockFile.lock('/tmp/felix.lock', function () {
 	}).on('error', function (err) {
 		console.log('something went wrong on the request', err.request.options);
 	});
+};
 
-	lockFile.unlock('/tmp/felix.lock', function () {
+lockFile.lock('/tmp/octoStats.lock', function () {
+	Config.octoprint.forEach(function(e) {
+	  	getJob(ip,{headers: {'X-Api-Key': e.apikey}});
+		getPrinter(ip,{headers: {'X-Api-Key': e.apikey}});
+	});
+	lockFile.unlock('/tmp/octoStats.lock', function () {
 		console.log('failed to unlock');
 	});
 });
