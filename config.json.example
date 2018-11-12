@@ -7,13 +7,20 @@
     "database": "3dprinter"
   },
   "octoprint": [{
-    "host": "127.0.0.1:5001",
+    "host": "192.168.1.44:5001",
     "apikey": "abcdefghiyklmnopqrs",
     "name": "Hexagon1"
-  },
-  {
-    "host": "127.0.0.1:5002",
-    "apikey": "abcdefghiykasd",
+  },{
+    "host": "192.168.1.44:5002",
+    "apikey": "abcdefghiyklmnopqrs",
     "name": "Hexagon2"
+  },{
+    "host": "192.168.1.44:5003",
+    "apikey": "abcdefghiyklmnopqrs",
+    "name": "Lulzbot"
+  },{
+    "host": "192.168.1.44:5004",
+    "apikey": "abcdefghiyklmnopqrs",
+    "name": "Prusa"
   }]
 }

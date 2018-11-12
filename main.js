@@ -50,7 +50,6 @@ function getJob(host, args,name ){
 		rclient.get('http://' + host + '/api/job', args, function (data) {
 		// Status
 		var status = {value: data.state, time: time};
-
 		client.writeMeasurement(
 			'status', [
 				{
@@ -81,8 +80,8 @@ function getJob(host, args,name ){
 					},
 					tags: { host: name },
 				}
-			]
-		)else{
+			])
+		}else{
 			client.writeMeasurement(
 			'status', [
 				{
@@ -93,8 +92,7 @@ function getJob(host, args,name ){
 					},
 					tags: { host: name },
 				}
-			]
-			}
+			])
 		}
 	}).on('error', function (err) {
 		console.log('something went wrong on the request', err.request.options);
